@@ -1,0 +1,73 @@
+:root {
+  --font-display: 'Darker Grotesque', system-ui, sans-serif;
+  --font-body: 'Albert Sans', system-ui, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, monospace;
+  --cream: #fbf6ef;
+  --card: #ffffff;
+  --ink: #2b211c;
+  --muted: #9b8e84;
+  --line: #ece1d5;
+  --coral: #ef5d4c;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, #fdeee4, transparent),
+    radial-gradient(900px 500px at -10% 110%, #f0f3ee, transparent),
+    var(--cream);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #ffd9cf; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e4d6c8; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #d4c2b0; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(43,33,28,0.04), 0 8px 24px rgba(43,33,28,0.05);
+}
+
+.pill {
+  font-family: var(--font-mono); font-size: 11px; padding: 4px 10px;
+  border-radius: 20px; background: #f3ebe1; color: #7a6a5d; border: 1px solid var(--line);
+}
+
+.field {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 11px;
+  background: #fcfaf6; font-family: var(--font-body); font-size: 13.5px; color: var(--ink);
+  outline: none; transition: border .12s, box-shadow .12s;
+}
+.field:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(239,93,76,0.12); }
+
+.btn {
+  cursor: pointer; font-family: var(--font-body); font-weight: 600; font-size: 13.5px;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+  padding: 9px 16px; border-radius: 11px; transition: transform .08s, box-shadow .12s, background .12s;
+}
+.btn:hover { box-shadow: 0 4px 14px rgba(43,33,28,0.1); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-coral { background: var(--coral); color: #fff; border-color: var(--coral); }
+.btn-ink { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+@keyframes floatin { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.floatin { animation: floatin .4s cubic-bezier(.16,1,.3,1) both; }
+
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.5px; }
