@@ -14,7 +14,6 @@
 
 </div>
 
----
 
 ## ✨ What it does
 
@@ -28,7 +27,7 @@ QueryDesk turns raw tabular data into reports that anyone can build — no query
 
 It ships with two realistic built-in datasets so it's useful the moment you open it — and works for anyone with **zero configuration**.
 
----
+
 
 ## 🧠 Under the hood
 
@@ -49,7 +48,7 @@ Uploaded datasets and saved reports are serialized to `localStorage`, so a dashb
 ### Optional AI, done safely
 The "Ask your data" feature calls a model server-side through a Next.js route handler, reading the API key from `process.env` only. It's never shipped to the browser or committed to the repo, and the entire app degrades gracefully when no key is present.
 
----
+
 
 ## 📦 Built-in datasets
 
