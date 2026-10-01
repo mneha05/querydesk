@@ -50,6 +50,34 @@ The "Ask your data" feature calls a model server-side through a Next.js route ha
 
 
 
+## ⚙️ QueryLab: measured query optimization
+
+QueryDesk now includes a reproducible SQL performance lab under [`querylab/`](querylab/README.md). It generates a deterministic SQLite workload, captures `EXPLAIN QUERY PLAN`, adds targeted indexes, reruns the exact same queries, and records median before/after latency.
+
+Latest GitHub Actions measurement on **SQLite 3.45.1** with **120,000 orders**:
+
+| Scenario | Before | After | Speedup |
+|---|---:|---:|---:|
+| filter + sort | 5.742 ms | 0.113 ms | **50.89×** |
+| covering aggregate | 6.417 ms | 1.058 ms | **6.07×** |
+| join + aggregate | 13.089 ms | 5.087 ms | **2.57×** |
+
+The important part is the optimizer evidence, not just the wall-clock number:
+
+```text
+SCAN orders
+USE TEMP B-TREE FOR ORDER BY
+
+        ↓ composite index
+
+SEARCH orders USING INDEX idx_orders_account_created
+(account_id=? AND created_at>? AND created_at<?)
+```
+
+The aggregate experiment switches to a **covering index**, and the join experiment replaces a scan-heavy path with indexed lookups on both sides. Full measured plans are in [`querylab/RESULTS.md`](querylab/RESULTS.md).
+
+---
+
 ## 📦 Built-in datasets
 
 | Dataset | Rows | Columns |
