@@ -1,0 +1,44 @@
+name: QueryLab
+
+on:
+  push:
+    paths:
+      - "querylab/**"
+      - ".github/workflows/querylab.yml"
+  pull_request:
+    paths:
+      - "querylab/**"
+      - ".github/workflows/querylab.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  query-optimization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile benchmark
+        run: python -m py_compile querylab/benchmark.py
+      - name: Run optimizer benchmark
+        run: python querylab/benchmark.py --rows 120000 --out querylab-results.json
+      - name: Verify recorded scenarios
+        run: |
+          python - <<'PY'
+          import json
+          data = json.load(open("querylab-results.json"))
+          names = {m["scenario"] for m in data["measurements"]}
+          assert names == {"filter_sort", "covering_aggregate", "join"}
+          for m in data["measurements"]:
+              assert m["before_ms"] > 0
+              assert m["after_ms"] > 0
+              assert any("SEARCH" in p.upper() or "COVERING INDEX" in p.upper() for p in m["after_plan"])
+          print("verified", names)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: querylab-results
+          path: querylab-results.json
